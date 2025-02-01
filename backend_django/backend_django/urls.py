@@ -3,6 +3,8 @@ from django.contrib import admin # type: ignore
 from django.urls import path # type: ignore
 from database import views
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -20,4 +22,6 @@ urlpatterns = [
     path('api/healtcheck/', views.health_check, name='healthcheck'),
     
     path('api/eliminar_imagen/', views.eliminar_imagen, name='eliminar_imagen'),
+    
+    path('api/persona-lite/', views.persona_lite_view, name='persona_lite'),
 ]

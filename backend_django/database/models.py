@@ -39,3 +39,10 @@ class PersonaImagen(models.Model):
 
     def __str__(self):
         return f"{self.persona} - {self.imagen}"
+
+
+class PersonaLite(models.Model):
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email

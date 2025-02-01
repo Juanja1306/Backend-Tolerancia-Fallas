@@ -38,7 +38,7 @@ INSTALLED_APPS += ['storages']
 
 GS_BUCKET_NAME = 'bucket-storage-backend'  # Nombre del bucket de Google Cloud Storage
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    r"C:\Users\juanj\Desktop\backend-django-virtualizacion\inspiring-bonus-445203-p0-d3aab7b05921.json"
+    r"C:\Users\juanj\Desktop\Backend-Tolerancia-Fallas\inspiring-bonus-445203-p0-d3aab7b05921.json"
 ) 
 
 client = storage.Client(credentials=GS_CREDENTIALS)
@@ -114,8 +114,19 @@ DATABASES = {
         'PASSWORD': '0000',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
-    }  
+    },
+    'otra_db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'correos_db',
+        'USER': 'postgres',
+        'PASSWORD': '0000',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
 }
+
+DATABASE_ROUTERS = ['database.database_routers.PersonaLiteRouter']
+
 
 """'default': {
         'ENGINE': 'django.db.backends.sqlite3',

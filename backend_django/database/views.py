@@ -1,19 +1,14 @@
-# from django.shortcuts import render, redirect # type: ignore
-# from .forms import ImagenForm
-# from .models import Imagen
-# from django.core.files.storage import default_storage # type: ignore
-# from google.cloud import storage
-# from backend_django.settings import bucket
 from django.http import JsonResponse
 from .models import Imagen, PersonaImagen, Persona
 from backend_django.settings import bucket
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.decorators import api_view #type: ignore
+from rest_framework.response import Response#type: ignore
+from rest_framework import status #type: ignore
 from .serializers import PersonaSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken#type: ignore
 from .serializers import PersonaSerializer, ImagenSerializer
 from django.contrib.auth.hashers import check_password
+from .models import PersonaLite
 
 
 
@@ -195,39 +190,37 @@ def eliminar_imagen(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-# def subir_imagen(request):
-#     if request.method == 'POST':
-#         form = ImagenForm(request.POST)
-#         if form.is_valid():
-#             try:
-#                 # Configuración del cliente de Google Cloud Storage
-
-#                 # Subir la imagen al bucket
-#                 archivo = request.FILES['archivo']  # El archivo subido por el usuario
-#                 blob_name = archivo.name
-#                 blob = bucket.blob(blob_name)
-
-#                 # Subir el archivo al bucket
-#                 blob.upload_from_file(archivo.file, content_type=archivo.content_type)
-
-#                 # Guardar la URL pública en el modelo
-#                 imagen = form.save(commit=False)  # Guarda el modelo pero no en la BD
-#                 imagen.url = blob.public_url  # Asigna la URL pública generada
-#                 imagen.save()  # Guarda en la base de datos
-
-#                 print("Imagen subida y guardada correctamente.")
-#                 return redirect('lista_imagenes')
-#             except Exception as e:
-#                 print(f"Error al guardar la imagen: {e}")
-#         else:
-#             print(f"Errores del formulario: {form.errors}")
-#     else:
-#         form = ImagenForm()
-#     return render(request, 'database/subir_imagen.html', {'form': form})
 
 
-# def lista_imagenes(request):
-#     imagenes = Imagen.objects.all()
-#     return render(request, 'database/lista_imagenes.html', {'imagenes': imagenes})
 
+@api_view(['GET', 'POST','DELETE'])
+def persona_lite_view(request):
+    if request.method == 'GET':
+        # Esto se enruta automáticamente a 'otra_db' por el router
+        personas_lite = PersonaLite.objects.all()
+        data = [{"id": p.id, "email": p.email} for p in personas_lite]
+        return Response(data, status=status.HTTP_200_OK)
 
+    elif request.method == 'POST':
+        email = request.data.get('email')
+        if not email:
+            return Response({"error": "Falta el email"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Se enruta automáticamente a 'otra_db'
+        persona_lite = PersonaLite.objects.create(email=email)
+        return Response(
+            {"id": persona_lite.id, "email": persona_lite.email},
+            status=status.HTTP_201_CREATED
+        )
+    elif request.method == 'DELETE':
+        email = request.data.get('email')
+        if not email:
+            return Response({"error": "Falta el email"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Se enruta automáticamente a 'otra_db'
+        try:
+            persona_lite = PersonaLite.objects.get(email=email)
+            persona_lite.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PersonaLite.DoesNotExist:
+            return Response({"error": "PersonaLite no encontrada"}, status=status.HTTP_404_NOT_FOUND)
