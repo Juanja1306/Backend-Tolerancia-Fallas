@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Imágenes</title>
+</head>
+<body>
+    <h1>Lista de Imágenes</h1>
+    <ul>
+        {% for imagen in imagenes %}
+        <li>
+            <h3>{{ imagen.titulo }}</h3>
+            <p>{{ imagen.descripcion }}</p>
+            <p>Fecha subida: {{ imagen.fecha_subida }}</p>
+            <img src="{{ imagen.url }}" alt="{{ imagen.titulo }}" style="max-width: 300px;">
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'subir_imagen' %}">Subir otra imagen</a>
+</body>
+</html>

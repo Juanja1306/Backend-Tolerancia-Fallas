@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subir Imagen</title>
+</head>
+<body>
+    <h1>Subir Imagen</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <!-- Campo manual para subir la imagen -->
+        <label for="archivo">Selecciona una imagen:</label>
+        <input type="file" name="archivo" id="archivo" required>
+        <br><br>
+        <button type="submit">Subir</button>
+    </form>
+    <a href="{% url 'lista_imagenes' %}">Ver imágenes</a>
+</body>
+</html>
