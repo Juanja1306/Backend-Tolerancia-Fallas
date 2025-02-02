@@ -75,6 +75,8 @@ Si deseas que otras máquinas en tu red puedan acceder a tu servidor de desarrol
    python manage.py runserver 0.0.0.0:8000
    ```
 
+---
+
 # Configuracion Nginx
 1. Descarga de Nginx
 Descargamos la última versión disponible desde su página oficial 
@@ -82,17 +84,17 @@ https://nginx.org/download/nginx-1.27.3.zip.
 
 2. nstalación en el disco raíz
 Descomprimimos o instalamos Nginx en la ubicación deseada, por ejemplo:
-```nginx
+```bash
 C:\nginx\nginx-1.26.2
 ```
 3. Edición del archivo de configuración
 Ingresamos a la carpeta de configuración:
-```nginx
+```bash
 C:\nginx\nginx-1.26.2\conf
 ```
 
 Aquí se encuentra el archivo nginx.conf:
-```nginx
+```bash
 C:\nginx\nginx-1.26.2\conf\nginx.conf
 ```
 Procedemos a editarlo de la siguiente forma:
@@ -146,4 +148,24 @@ Procedemos a editarlo de la siguiente forma:
    }
 ```
 
+4. Inicio de Nginx
+Finalmente, para poner en marcha el servicio de Nginx, ejecutamos el siguiente comando desde la ruta de instalación:
+```bash
+C:\nginx> .\nginx.exe
+```
+5. Comandos adicionales
+Podemos ver la ejecucion con:
+```bash
+Get-Process nginx
+```
+
+Lo podemos detener con:
+```bash
+.\nginx.exe -s stop
+```
+
+Lo podemos reiniciar con:
+```bash
+.\nginx.exe -s reload
+```
 
