@@ -118,8 +118,8 @@ Procedemos a editarlo de la siguiente forma:
 
       # Definición de upstream para el balanceo hacia los servidores de Django
       upstream django_backends {
-         server 127.0.0.1:8000;       # IP de servidor de Django
-         server 192.168.0.101:8000;   # IP de servidor de Django
+         server 127.0.0.1:8000;       # IP de servidor 1 de Django
+         server 192.168.0.101:8000;   # IP de servidor 2 de Django
       }
 
       server {
