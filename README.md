@@ -18,7 +18,7 @@ Esta guía detalla cómo configurar un backend en Django sobre una VM de Google 
    pip install -r requirements.txt
    ```
 
-3. Configurar la conexion con la base de datos en settings.py:
+3. Configurar la conexion con la base de datos en settings.py cambiando a las bases correspondientes:
    ```bash
       DATABASES = {
          'default': {
@@ -28,7 +28,15 @@ Esta guía detalla cómo configurar un backend en Django sobre una VM de Google 
             'PASSWORD': '0000',
             'HOST': '127.0.0.1', 
             'PORT': '5432',
-         }  
+         },  
+         'otra_db': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'correos_db',
+            'USER': 'postgres',
+            'PASSWORD': '0000',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+         }
       }
 
    ```
@@ -37,6 +45,8 @@ Esta guía detalla cómo configurar un backend en Django sobre una VM de Google 
    ```bash
    python manage.py makemigrations database -v 3
    python manage.py migrate
+
+   python manage.py migrate --database=otra_db
    ```
 
 5. Crea el archivo de credenciales:
@@ -56,8 +66,11 @@ Esta guía detalla cómo configurar un backend en Django sobre una VM de Google 
 ---
 
 # Correr al servidor
-
-1. Ejecuta el servidor:
+Para probar tu aplicación en un entorno de desarrollo local, ejecuta el siguiente comando en la terminal:
    ```bash
    python manage.py runserver
+   ```
+Si deseas que otras máquinas en tu red puedan acceder a tu servidor de desarrollo, ejecuta el siguiente comando:
+   ```bash
+   python manage.py runserver 0.0.0.0:8000
    ```
