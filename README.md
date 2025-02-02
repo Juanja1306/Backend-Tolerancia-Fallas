@@ -128,7 +128,7 @@ Procedemos a editarlo de la siguiente forma:
 
          # Bloque para servir el frontend
          location / {
-               root "C:/nginx/html/dist";
+               root "C:/nginx/html/dist"; #Ruta de la carpeta dist del frontend de:
                try_files $uri /index.html;
          }
 
