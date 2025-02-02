@@ -85,17 +85,17 @@ https://nginx.org/download/nginx-1.27.3.zip.
 2. nstalación en el disco raíz
 Descomprimimos o instalamos Nginx en la ubicación deseada, por ejemplo:
 ```bash
-C:\nginx\nginx-1.26.2
+C:\nginx
 ```
 3. Edición del archivo de configuración
 Ingresamos a la carpeta de configuración:
 ```bash
-C:\nginx\nginx-1.26.2\conf
+C:\nginx\conf
 ```
 
 Aquí se encuentra el archivo nginx.conf:
 ```bash
-C:\nginx\nginx-1.26.2\conf\nginx.conf
+C:\nginx\conf\nginx.conf
 ```
 Procedemos a editarlo de la siguiente forma:
 ```nginx
