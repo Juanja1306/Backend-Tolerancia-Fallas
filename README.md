@@ -154,6 +154,7 @@ Finalmente, para poner en marcha el servicio de Nginx, ejecutamos el siguiente c
 C:\nginx> .\nginx.exe
 ```
 5. Comandos adicionales
+
 Podemos ver la ejecucion con:
 ```bash
 Get-Process nginx
