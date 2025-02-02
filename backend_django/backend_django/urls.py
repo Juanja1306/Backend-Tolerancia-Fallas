@@ -10,7 +10,6 @@ urlpatterns = [
     
     path('api/crear_persona/', views.crear_persona, name='crear_persona'),
     
-    #path('api/subir_imagen/', views.subir_imagen, name='subir_imagen'),
     path('api/lista_imagenes/', views.lista_imagenes, name='lista_imagenes'),
     
     path('api/login/', views.login_usuario, name='login_usuario'),

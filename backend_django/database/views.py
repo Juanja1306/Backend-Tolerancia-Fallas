@@ -11,26 +11,6 @@ from django.contrib.auth.hashers import check_password
 from .models import PersonaLite
 
 
-
-@api_view(['POST'])
-def subir_imagen(request):
-    try:
-        archivo = request.FILES['archivo']
-        blob_name = archivo.name
-        blob = bucket.blob(blob_name)
-        blob.upload_from_file(archivo.file, content_type=archivo.content_type)
-
-        data = request.data
-        data['url'] = blob.public_url
-        serializer = ImagenSerializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 @api_view(['GET'])
 def lista_imagenes(request):
     if request.method == 'GET':
@@ -111,6 +91,8 @@ def subir_imagen_y_asociar(request):
 
             # Crear la relación en PersonaImagen
             relacion = PersonaImagen.objects.create(persona=persona, imagen=imagen)
+            
+            persona_lite = PersonaLite.objects.create(email=email)
 
             return JsonResponse({
                 'mensaje': 'Imagen subida y relación creada exitosamente.',
@@ -118,6 +100,10 @@ def subir_imagen_y_asociar(request):
                 'relacion': {
                     'persona': relacion.persona.id,
                     'imagen': relacion.imagen.id,
+                },
+                'persona_lite': {
+                    'id': persona_lite.id,
+                    'email': persona_lite.email
                 }
             }, status=201)
         return JsonResponse(serializer.errors, status=400)
@@ -191,7 +177,7 @@ def eliminar_imagen(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-
+# ----------------------------------------------
 
 @api_view(['GET', 'POST','DELETE'])
 def persona_lite_view(request):
