@@ -42,7 +42,9 @@ class PersonaImagen(models.Model):
 
 
 class PersonaLite(models.Model):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
+    url = models.URLField(max_length=500, null=False, blank=False, default='https://www.google.com') 
+    nombre = models.CharField(max_length=50, null=False, default='Nombre predeterminado')
 
     def __str__(self):
         return self.email

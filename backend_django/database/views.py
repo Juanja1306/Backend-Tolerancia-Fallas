@@ -92,7 +92,7 @@ def subir_imagen_y_asociar(request):
             # Crear la relación en PersonaImagen
             relacion = PersonaImagen.objects.create(persona=persona, imagen=imagen)
             
-            persona_lite = PersonaLite.objects.create(email=email)
+            persona_lite = PersonaLite.objects.create(email=email, url=blob.public_url, nombre=persona.nombre)
 
             return JsonResponse({
                 'mensaje': 'Imagen subida y relación creada exitosamente.',
@@ -103,7 +103,10 @@ def subir_imagen_y_asociar(request):
                 },
                 'persona_lite': {
                     'id': persona_lite.id,
-                    'email': persona_lite.email
+                    'email': persona_lite.email,
+                    'url': persona_lite.url,
+                    'nombre': persona_lite.nombre,
+                    
                 }
             }, status=201)
         return JsonResponse(serializer.errors, status=400)
@@ -184,18 +187,20 @@ def persona_lite_view(request):
     if request.method == 'GET':
         # Esto se enruta automáticamente a 'otra_db' por el router
         personas_lite = PersonaLite.objects.all()
-        data = [{"id": p.id, "email": p.email} for p in personas_lite]
+        data = [{"id": p.id, "email": p.email, "url": p.url,"nombre": p.nombre,} for p in personas_lite]
         return Response(data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         email = request.data.get('email')
+        url = request.data.get('url')
+        nombre = request.data.get('nombre')
         if not email:
             return Response({"error": "Falta el email"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Se enruta automáticamente a 'otra_db'
-        persona_lite = PersonaLite.objects.create(email=email)
+        persona_lite = PersonaLite.objects.create(email=email, url=url, nombre=nombre)
         return Response(
-            {"id": persona_lite.id, "email": persona_lite.email},
+            {"id": persona_lite.id, "email": persona_lite.email, "url": persona_lite.url, "nombre": persona_lite.nombre},
             status=status.HTTP_201_CREATED
         )
     elif request.method == 'DELETE':
