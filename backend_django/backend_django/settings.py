@@ -112,8 +112,8 @@ DATABASES = {
         'NAME': 'tolerancia_db',
         'USER': 'postgres',
         'PASSWORD': '0000',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'HOST': '192.168.72.133', 
+        'PORT': '5433',
     },
     'otra_db': {
         'ENGINE': 'django.db.backends.postgresql',
