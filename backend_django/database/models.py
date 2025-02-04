@@ -1,7 +1,7 @@
-from django.db import models # type: ignore
+from django.db import models
 
-from django.utils.crypto import get_random_string # type: ignore
-from django.contrib.auth.hashers import make_password # type: ignore
+from django.utils.crypto import get_random_string
+from django.contrib.auth.hashers import make_password
 
 class Persona(models.Model):
     # ID autoincremental se crea automáticamente si no especificas un campo primary key
@@ -39,6 +39,23 @@ class PersonaImagen(models.Model):
 
     def __str__(self):
         return f"{self.persona} - {self.imagen}"
+    
+
+class Changes(models.Model):
+    METHOD_CHOICES = (
+        ('INSERT', 'Insertar'),
+        ('DELETE', 'Eliminar'),
+        ('UPDATE', 'Actualizar'),
+        # Puedes agregar más métodos si es necesario
+    )
+    
+    metodo = models.CharField(max_length=10, choices=METHOD_CHOICES)
+    tabla = models.CharField(max_length=100)
+    descripcion = models.JSONField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.metodo} en {self.tabla} el {self.fecha}"
 
 
 class PersonaLite(models.Model):

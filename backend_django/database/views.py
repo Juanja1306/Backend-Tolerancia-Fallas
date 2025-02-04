@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .models import Imagen, PersonaImagen, Persona
+from .models import Imagen, PersonaImagen, Persona, Changes
 from backend_django.settings import bucket
 from rest_framework.decorators import api_view #type: ignore
 from rest_framework.response import Response#type: ignore
@@ -9,6 +9,16 @@ from rest_framework_simplejwt.tokens import RefreshToken#type: ignore
 from .serializers import PersonaSerializer, ImagenSerializer
 from django.contrib.auth.hashers import check_password
 from .models import PersonaLite
+
+def log_change(metodo, tabla, descripcion):
+    """
+    Registra un cambio en el modelo Changes.
+    
+    :param metodo: Método de la operación ('INSERT', 'DELETE', 'UPDATE', etc.)
+    :param tabla: Nombre de la tabla afectada.
+    :param descripcion: Diccionario con los detalles del cambio.
+    """
+    Changes.objects.create(metodo=metodo, tabla=tabla, descripcion=descripcion)
 
 
 @api_view(['GET'])
@@ -36,7 +46,20 @@ def crear_persona(request):
 
         if serializer.is_valid():
             # Guardar la nueva persona
-            serializer.save()
+            persona = serializer.save()
+            log_change(
+                metodo='INSERT',
+                tabla='Persona',
+                descripcion={
+                    'id': persona.id,
+                    'nombre': persona.nombre,
+                    'apellido': persona.apellido,
+                    'tipo_sangre': persona.tipo_sangre,
+                    'email': persona.email,
+                    'contrasenia': persona.contrasenia,
+                    # Nota: la contraseña ya se guarda hasheada.
+                }
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)  # Respuesta exitosa
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Errores de validación
     except Exception as e:
@@ -88,9 +111,30 @@ def subir_imagen_y_asociar(request):
 
         if serializer.is_valid():
             imagen = serializer.save()
+            log_change(
+                metodo='INSERT',
+                tabla='Imagen',
+                descripcion={
+                    'id': imagen.id,
+                    'titulo': imagen.titulo,
+                    'descripcion': imagen.descripcion,
+                    'url': imagen.url,
+                    'fecha_subida': imagen.fecha_subida.isoformat() if imagen.fecha_subida else None
+                }
+            )
 
             # Crear la relación en PersonaImagen
             relacion = PersonaImagen.objects.create(persona=persona, imagen=imagen)
+            log_change(
+                metodo='INSERT',
+                tabla='PersonaImagen',
+                descripcion={
+                    'id': relacion.id,
+                    'persona_id': persona.id,
+                    'imagen_id': imagen.id,
+                    'fecha_asociacion': relacion.fecha_asociacion.isoformat() if relacion.fecha_asociacion else None
+                }
+            )
             
             persona_lite = PersonaLite.objects.create(email=email, url=blob.public_url, nombre=persona.nombre)
 
@@ -166,9 +210,30 @@ def eliminar_imagen(request):
         blob_name = imagen.url.split('/')[-1]
         blob = bucket.blob(blob_name)
         blob.delete()
+        log_change(
+            metodo='DELETE',
+            tabla='PersonaImagen',
+            descripcion={
+                'id': relacion.id,
+                'persona_id': persona.id,
+                'imagen_id': imagen.id,
+                'fecha_asociacion': relacion.fecha_asociacion.isoformat() if relacion.fecha_asociacion else None
+            }
+        )
 
         # Eliminar la relación y la imagen de la base de datos
         relacion.delete()
+        log_change(
+            metodo='DELETE',
+            tabla='Imagen',
+            descripcion={
+                'id': imagen.id,
+                'titulo': imagen.titulo,
+                'descripcion': imagen.descripcion,
+                'url': imagen.url,
+                'fecha_subida': imagen.fecha_subida.isoformat() if imagen.fecha_subida else None
+            }
+        )
         imagen.delete()
 
         return JsonResponse({'mensaje': 'Imagen eliminada exitosamente.'}, status=200)
