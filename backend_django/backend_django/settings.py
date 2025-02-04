@@ -117,10 +117,10 @@ DATABASES = {
     },
     'otra_db': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'correos_db',
-        'USER': 'postgres',
-        'PASSWORD': '0000',
-        'HOST': '127.0.0.1', #192.168.0.151
+        'NAME': 'postgres',
+        'USER': 'otrabaseusuario', 
+        'PASSWORD': 'uh6pOkb-kIue', 
+        'HOST': '34.136.101.148', 
         'PORT': '5432',
     }
 }
