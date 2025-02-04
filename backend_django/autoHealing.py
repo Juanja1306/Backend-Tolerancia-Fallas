@@ -22,7 +22,7 @@ def start_new_backend_instance():
         if os.name == 'nt':
             # Windows: abre una nueva ventana de CMD y ejecuta el comando.
             # El comando 'start' es interno de cmd, por eso usamos shell=True.
-            subprocess.Popen('start cmd /k "python manage.py runserver 8000"', shell=True)
+            subprocess.Popen('start cmd /k "python manage.py runserver 0.0.0.0:8000"', shell=True)
         else:
             # En sistemas tipo Unix (Linux, macOS) se puede usar gnome-terminal o xterm.
             subprocess.Popen([
