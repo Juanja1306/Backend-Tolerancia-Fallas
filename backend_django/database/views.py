@@ -49,7 +49,7 @@ def crear_persona(request):
             persona = serializer.save()
             log_change(
                 metodo='INSERT',
-                tabla='Persona',
+                tabla='database_persona',
                 descripcion={
                     'id': persona.id,
                     'nombre': persona.nombre,
@@ -113,7 +113,7 @@ def subir_imagen_y_asociar(request):
             imagen = serializer.save()
             log_change(
                 metodo='INSERT',
-                tabla='Imagen',
+                tabla='database_imagen',
                 descripcion={
                     'id': imagen.id,
                     'titulo': imagen.titulo,
@@ -127,7 +127,7 @@ def subir_imagen_y_asociar(request):
             relacion = PersonaImagen.objects.create(persona=persona, imagen=imagen)
             log_change(
                 metodo='INSERT',
-                tabla='PersonaImagen',
+                tabla='database_personaImagen',
                 descripcion={
                     'id': relacion.id,
                     'persona_id': persona.id,
@@ -212,7 +212,7 @@ def eliminar_imagen(request):
         blob.delete()
         log_change(
             metodo='DELETE',
-            tabla='PersonaImagen',
+            tabla='database_personaImagen',
             descripcion={
                 'id': relacion.id,
                 'persona_id': persona.id,
@@ -225,7 +225,7 @@ def eliminar_imagen(request):
         relacion.delete()
         log_change(
             metodo='DELETE',
-            tabla='Imagen',
+            tabla='database_imagen',
             descripcion={
                 'id': imagen.id,
                 'titulo': imagen.titulo,
