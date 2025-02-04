@@ -162,7 +162,7 @@ Get-Process nginx
 
 Lo podemos detener con:
 ```bash
-.\nginx.exe -s stop
+ Stop-Process -Name nginx -Force
 ```
 
 Lo podemos reiniciar con:
