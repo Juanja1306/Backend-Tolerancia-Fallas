@@ -112,7 +112,7 @@ DATABASES = {
         'NAME': 'tolerancia_db',
         'USER': 'postgres',
         'PASSWORD': '0000',
-        'HOST': '192.168.72.133', 
+        'HOST': '192.168.134.133', 
         'PORT': '5433',
     },
     'otra_db': {

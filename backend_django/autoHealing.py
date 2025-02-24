@@ -13,7 +13,7 @@ SLEEP_INTERVAL = 5       # Intervalo entre comprobaciones en segundos
 def start_new_backend_instance():
     """
     Abre una nueva terminal y ejecuta el comando para iniciar una nueva instancia local del backend.
-    En Windows se abre una ventana de CMD que ejecuta: `python manage.py runserver 8001`
+    En Windows se abre una ventana de CMD que ejecuta: `python manage.py runserver 8000`
     """
     print("=== Se ha detectado fallo en el healthcheck por 3 veces consecutivas ===")
     print("Iniciando una nueva instancia del backend en terminal...")
@@ -22,7 +22,8 @@ def start_new_backend_instance():
         if os.name == 'nt':
             # Windows: abre una nueva ventana de CMD y ejecuta el comando.
             # El comando 'start' es interno de cmd, por eso usamos shell=True.
-            subprocess.Popen('start cmd /k "python manage.py runserver 0.0.0.0:8000"', shell=True)
+            subprocess.Popen('start cmd /k "cd backend_django && python manage.py runserver 0.0.0.0:8000"', shell=True)
+
         else:
             # En sistemas tipo Unix (Linux, macOS) se puede usar gnome-terminal o xterm.
             subprocess.Popen([
